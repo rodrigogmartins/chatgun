@@ -2,8 +2,8 @@ import { useEffect, useState, useReducer } from 'react'
 import Gun from 'gun'
 import { SEA } from 'gun'
 
-import Message from './Message'
 import { gun } from './db'
+import { Message } from './Message'
 
 const key = 'SECRET'
 
@@ -45,7 +45,7 @@ function Chat() {
       message: formState.message
     }
     const secret = await SEA.encrypt(newMessage, key)
-    const message = user.get('all').set({ message: secret })
+    const message = gun.get('all').set({ message: secret })
     const index = new Date().toISOString();
     
     gun.get('chat').get(index).put(message)

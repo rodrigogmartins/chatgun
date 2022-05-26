@@ -1,0 +1,75 @@
+
+  
+:root {
+  --bg-primary: #0e1a3a;
+  --bg-secondary: #122353;
+  --secondary: #db1bdb;
+
+  font-size: 16px;
+}
+
+
+body {
+  font-family: monospace, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--secondary);
+}
+
+input,
+button {
+  height: 40px;
+  width: 100%;
+  margin: 5px 0px;
+}
+
+label {
+  font-weight: bold;
+}
+
+input {
+  padding: 0px 10px;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: var(--bg-primary);
+  color: var(--secondary);
+  font-weight: bold;
+  border-color: var(--secondary);
+  border-style: solid;
+}
+
+button:hover {
+  background-color: var(--secondary);
+  color: var(--bg-primary);
+  font-weight: bold;
+  border-color: var(--secondary);
+  border-style: solid;
+  border-width: 0px;
+}
+
+button:active {
+  border-color: transparent;
+  box-shadow: inset 0px 0px 14px -5px #333;
+}
+
+button.secondary {
+  background-color: var(--bg-secondary);
+}
+
+.container {
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.container > div {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0px;
+}
+
