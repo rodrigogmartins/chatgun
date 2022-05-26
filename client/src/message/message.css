@@ -10,6 +10,7 @@ p {
 .messageContainer {
   display: flex;
   align-items: center;
+  margin: 15px 0;
 }
 
 .messageContainer.right {

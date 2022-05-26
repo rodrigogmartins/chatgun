@@ -13,14 +13,23 @@ const initialState = {
 // Create a reducer that will update the messages array
 function reducer(state, message) {
   return {
-    messages: [message, ...state.messages]
+    messages: [...state.messages, message]
   }
 }
 
 function Chat({ loggedUser }) {
-  const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState('')
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  const newMessagesArray = () => {
+    const formattedMessages = state.messages.filter((value, index) => {
+      const _value = JSON.stringify(value)
+
+      return (index === state.messages.findIndex(obj => JSON.stringify(obj) === _value))
+    })
+
+    return formattedMessages
+  }
 
   useEffect(() => {
     gun.get('chat')
@@ -64,7 +73,7 @@ function Chat({ loggedUser }) {
       />
       <button onClick={sendMessage}>Send Message</button>
       { 
-        state.messages?.map((message, index) => {
+        newMessagesArray().map((message, index) => {
           return <Message key={index} message={message} loggedUser={loggedUser} />
         })
       }
