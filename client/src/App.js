@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 
 import { gun } from './db'
-import { Chat } from './Chat'
+import { Chat } from './chat/Chat'
 import { Login } from './login/Login'
 
 function App() {
@@ -48,7 +48,7 @@ function App() {
             errorMessage={errorMessage}
           />
         : <Chat
-            loggedUser={loggedUser}
+            loggedUser={user.is}
           />
       }
     </>

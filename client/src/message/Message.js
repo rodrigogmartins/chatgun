@@ -1,9 +1,7 @@
 import './message.css';
 
-import { gun } from '../db'
-
-function Message({ loggedUser, message }) {
-  const messageSide = (loggedUser === message.name) ? 'right' : 'left'
+function Message({ message }) {
+  const messageSide = (message.isFromLoggedUser) ? 'right' : 'left'
 
   return (
     <div className={`messageContainer ${messageSide}`}>

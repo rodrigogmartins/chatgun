@@ -1,5 +1,6 @@
 import Gun from 'gun'
-import GunSea from 'gun/sea'
+
+import 'gun/sea';
 
 const gun = Gun({
   peers: [

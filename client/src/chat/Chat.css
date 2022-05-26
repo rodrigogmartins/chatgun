@@ -1,0 +1,35 @@
+#root {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.chat {
+  width: 60vw;
+  max-width: 780px;
+  border: 3px solid var(--secondary);
+}
+
+.messagesContainer {
+  height: 85vh;
+  padding: 0 15px;
+  overflow-y: auto;
+}
+
+.messageSender {
+  display: flex;
+  padding: 10px;
+  border-top: 3px solid var(--secondary);
+}
+
+.messageSender button {
+  font-size: 1.5em;
+  width: 60px;
+  color: var(--bg-primary);
+  background-color: var(--secondary);
+}
+
+.messageSender input:focus {
+  outline: none;
+}
