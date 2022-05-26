@@ -1,8 +1,10 @@
 :root {
+  --bg-light: #e6eaee;
   --bg-primary: #0e1a3a;
   --bg-secondary: #122353;
   --secondary: #42dd71;
   --danger: #ff5858;
+  --black: #333;
 
   font-size: 16px;
 }

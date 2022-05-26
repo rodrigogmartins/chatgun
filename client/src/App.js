@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 
 import { gun } from './db'
 import { Chat } from './Chat'
-import { Login } from './Login'
+import { Login } from './login/Login'
 
 function App() {
   const [errorMessage, setErrorMessage] = useState('')
@@ -12,15 +12,8 @@ function App() {
   const user = gun.user().recall({ sessionStorage: true });
   
   useEffect(() => {
-    setPassword('')
     user.get('alias').on((username) => setLoggedUser(username))
-  }, [user])
-
-  gun.on('auth', async(event) => {
-    const alias = await user.get('alias');
-    loggedUser.set(alias);
-    console.log(`signed in as ${alias}`);
-  });
+  }, [])
 
   function signUp() {
     user.create(username, password, ({ err }) => {
@@ -33,7 +26,13 @@ function App() {
   }
 
   function login() {
-    user.auth(username, password, ({ err }) => err && setErrorMessage(err));
+    user.auth(username, password, ({ err }) => {
+      if(err) {
+        setErrorMessage(err)
+      } else {
+        user.get('alias').on((username) => setLoggedUser(username))
+      }
+    });
   }
 
   return (
@@ -48,7 +47,10 @@ function App() {
             setPassword={setPassword}
             errorMessage={errorMessage}
           />
-        : <Chat /> }
+        : <Chat
+            loggedUser={loggedUser}
+          />
+      }
     </>
   );
 }

@@ -1,0 +1,38 @@
+time {
+  font-size: 11px;
+}
+
+p {
+  margin: 0px;
+  margin-bottom: 10px;
+}
+
+.messageContainer {
+  display: flex;
+  align-items: center;
+}
+
+.messageContainer.right {
+  justify-content: end;
+  flex-direction: row-reverse;
+}
+
+.userPicture {
+  border-radius: 50%;
+}
+
+.messageContent {
+  margin: 0 15px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.messageContent.left {  
+  background-color: var(--bg-light);
+  color: var(--black);
+}
+
+.messageContent.right {
+  background-color: var(--secondary);
+  color: var(--bg-primary);
+}
