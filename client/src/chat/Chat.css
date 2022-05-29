@@ -6,30 +6,53 @@
 }
 
 .chat {
+  display: flex;
+  flex-direction: column;
   width: 60vw;
   max-width: 780px;
   border: 3px solid var(--secondary);
 }
 
-.messagesContainer {
+.messages-container {
   height: 85vh;
   padding: 0 15px;
   overflow-y: auto;
 }
 
-.messageSender {
+.message-sender {
   display: flex;
   padding: 10px;
   border-top: 3px solid var(--secondary);
 }
 
-.messageSender button {
+.message-sender.back-to-top {
+  margin-top: -50px;
+}
+
+.message-sender button {
   font-size: 1.5em;
   width: 60px;
   color: var(--bg-primary);
   background-color: var(--secondary);
 }
 
-.messageSender input:focus {
+.message-sender input:focus {
   outline: none;
+}
+
+
+.scroll-button {
+  position: sticky;
+  bottom: 9rem;
+  align-self: flex-end;
+  margin-right: 40px;
+  width: 50px;
+  height: 50px;
+}
+
+.scroll-button button {
+  font-size: x-large;
+  height: 55px;
+  width: 60px;
+  border-radius: 15px;
 }

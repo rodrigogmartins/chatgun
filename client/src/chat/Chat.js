@@ -1,11 +1,11 @@
 import './Chat.css';
 
-import { useEffect, useState, useReducer } from 'react'
+import { useEffect, useState, useReducer, useRef } from 'react'
 import Gun, { SEA } from 'gun'
+import debounce from 'lodash.debounce';
 
 import { gun } from '../db'
 import { Message } from '../message/Message'
-
 
 const key = 'SECRET'
 const initialState = {
@@ -19,8 +19,27 @@ function reducer(state, message) {
 }
 
 function Chat({ loggedUser }) {
+  const scrollBottom = useRef(null);
+  const [lastScrollTop, setLastScrollTop] = useState(Infinity)
+  const [canAutoScroll, setCanAutoScroll] = useState(true)
   const [newMessage, setNewMessage] = useState('')
   const [state, dispatch] = useReducer(reducer, initialState)
+  
+  const watchScroll = debounce((e) => {
+    const scrollOffset = 832;
+
+    if (e.target.scrollTop === e.target.scrollHeight - scrollOffset) {
+      setCanAutoScroll(false);
+    } else {
+      setCanAutoScroll((e.target.scrollTop || Infinity) > lastScrollTop);
+    }
+    setLastScrollTop(e.target.scrollTop)
+  }, 200);
+
+  function autoScroll() {
+    scrollBottom?.current?.scrollIntoView({ behavior: 'smooth' });
+    setCanAutoScroll(false)
+  }
 
   const newMessagesArray = () => {
     const formattedMessages = state.messages.filter((value, index) => {
@@ -54,7 +73,8 @@ function Chat({ loggedUser }) {
         }
 
         if (message.message) {
-          dispatch(message)      
+          dispatch(message)
+          autoScroll()
         }
       })
   }, [])
@@ -70,18 +90,26 @@ function Chat({ loggedUser }) {
     
     gun.get('chat').get(index).put(message)
     setNewMessage('')
+    setCanAutoScroll(true);
+    autoScroll();
   }
 
   return (
     <div className="chat">
-      <div className="messagesContainer">
+      <div className="messages-container" onScroll={watchScroll}>
         { 
           newMessagesArray().map((message, index) => {
             return <Message key={index} message={message} />
           })
         }
+        <div ref={scrollBottom} />
       </div>
-      <form className="messageSender" onSubmit={sendMessage}>
+      { canAutoScroll &&
+        <div className="scroll-button">
+          <button onClick={autoScroll}>👇</button>
+        </div>
+      }
+      <form className={canAutoScroll ? 'message-sender back-to-top' : 'message-sender'} onSubmit={sendMessage}>
         <input
           placeholder="Message"
           name="message"
@@ -89,7 +117,7 @@ function Chat({ loggedUser }) {
           autoComplete="off" 
           onChange={(e) => setNewMessage(e.target.value)}
         />
-        <button type="submit">›</button>
+        <button type="submit" disabled={!newMessage}>›</button>
       </form>
     </div>
   );
