@@ -13,8 +13,42 @@
   border: 3px solid var(--secondary);
 }
 
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  padding-bottom: 2px;
+  color: var(--bg-primary);
+  background-color: var(--secondary);
+}
+
+.chat-header div {
+  width: 80px;
+  margin-left: 10px;
+}
+
+.chat-header .username {
+  text-transform: capitalize;
+}
+
+.chat-header button {
+  width: fit-content;
+  padding: 0 15px;
+  border-width: 0px;
+  margin-right: 10px;
+}
+
+.chat-header button:hover {
+  background-color: var(--bg-secondary);
+  color: var(--secondary);
+  font-weight: bold;
+  border-width: 0px;
+  padding: 0 15px;
+}
+
 .messages-container {
-  height: 85vh;
+  height: 80vh;
   padding: 0 15px;
   overflow-y: auto;
 }
@@ -39,7 +73,6 @@
 .message-sender input:focus {
   outline: none;
 }
-
 
 .scroll-button {
   position: sticky;

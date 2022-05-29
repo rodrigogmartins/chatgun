@@ -23,6 +23,7 @@ function Chat({ loggedUser }) {
   const [lastScrollTop, setLastScrollTop] = useState(Infinity)
   const [canAutoScroll, setCanAutoScroll] = useState(true)
   const [newMessage, setNewMessage] = useState('')
+  const [loggedUserAlias, setLoggedUserAlias] = useState('')
   const [state, dispatch] = useReducer(reducer, initialState)
   
   const watchScroll = debounce((e) => {
@@ -51,32 +52,35 @@ function Chat({ loggedUser }) {
   }
 
   useEffect(() => {
-    gun.get('chat')
-      .map({
-        // lexical queries are kind of like a limited RegEx or Glob.
-        '.': {
-          // property selector
-          '>': new Date(+new Date() - 1 * 1000 * 60 * 60 * 3).toISOString(), // find any indexed property larger ~3 hours ago
-        },
-        '-': 1, // filter in reverse
-      })
-      .once(async (data, id) => {
-        if(!data) {
-          return;
-        }
-        const fromName = await gun.get(`~${data.user}`).get('alias')
-        const message = {
-          name: fromName,
-          message: `${(await SEA.decrypt(data.message, key))}`,
-          createdAt: Gun.state.is(data, 'message'),
-          isFromLoggedUser: loggedUser.alias === data.user
-        }
-
-        if (message.message) {
-          dispatch(message)
-          autoScroll()
-        }
-      })
+    (async () => {
+      await gun.get('chat')
+        .map({
+          // lexical queries are kind of like a limited RegEx or Glob.
+          '.': {
+            // property selector
+            '>': new Date(+new Date() - 1 * 1000 * 60 * 60 * 3).toISOString(), // find any indexed property larger ~3 hours ago
+          },
+          '-': 1, // filter in reverse
+        })
+        .once(async (data, id) => {
+          if(!data) {
+            return;
+          }
+          const fromName = await gun.get(`~${data.user}`).get('alias')
+          const message = {
+            name: fromName,
+            message: `${(await SEA.decrypt(data.message, key))}`,
+            createdAt: Gun.state.is(data, 'message'),
+            isFromLoggedUser: loggedUser.alias === data.user
+          }
+  
+          if (message.message) {
+            dispatch(message)
+          }
+        })
+      setLoggedUserAlias(await gun.get(`~${loggedUser.alias}`).get('alias'))
+      autoScroll()
+    })()
   }, [])
 
   async function sendMessage(e) {
@@ -96,13 +100,18 @@ function Chat({ loggedUser }) {
 
   return (
     <div className="chat">
+      <div className="chat-header">
+        <div></div>
+        {!!loggedUserAlias && <h3>Hi, <span className="username">{loggedUserAlias}</span>!</h3> }
+        <button>Logout</button>
+      </div>
       <div className="messages-container" onScroll={watchScroll}>
         { 
           newMessagesArray().map((message, index) => {
             return <Message key={index} message={message} />
           })
         }
-        <div ref={scrollBottom} />
+        <div ref={scrollBottom}></div>
       </div>
       { canAutoScroll &&
         <div className="scroll-button">
