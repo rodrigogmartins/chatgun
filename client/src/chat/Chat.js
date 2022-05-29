@@ -6,16 +6,15 @@ import Gun, { SEA } from 'gun'
 import { gun } from '../db'
 import { Message } from '../message/Message'
 
+
 const key = 'SECRET'
-// create the initial state to hold the messages
 const initialState = {
   messages: []
 }
 
-// Create a reducer that will update the messages array
 function reducer(state, message) {
   return {
-    messages: [...state.messages.slice(-50), message]
+    messages: [...state.messages.slice(-50), message].sort((a, b) => a.createdAt - b.createdAt)
   }
 }
 
@@ -26,7 +25,6 @@ function Chat({ loggedUser }) {
   const newMessagesArray = () => {
     const formattedMessages = state.messages.filter((value, index) => {
       const _value = JSON.stringify(value)
-
       return (index === state.messages.findIndex(obj => JSON.stringify(obj) === _value))
     })
 
@@ -56,7 +54,7 @@ function Chat({ loggedUser }) {
         }
 
         if (message.message) {
-          dispatch(message)          
+          dispatch(message)      
         }
       })
   }, [])
@@ -88,6 +86,7 @@ function Chat({ loggedUser }) {
           placeholder="Message"
           name="message"
           value={newMessage}
+          autoComplete="off" 
           onChange={(e) => setNewMessage(e.target.value)}
         />
         <button type="submit">›</button>
