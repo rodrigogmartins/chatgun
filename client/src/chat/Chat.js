@@ -18,7 +18,7 @@ function reducer(state, message) {
   }
 }
 
-function Chat({ loggedUser }) {
+function Chat({ loggedUser, logoutFunction }) {
   const scrollBottom = useRef(null);
   const [lastScrollTop, setLastScrollTop] = useState(Infinity)
   const [canAutoScroll, setCanAutoScroll] = useState(true)
@@ -103,7 +103,7 @@ function Chat({ loggedUser }) {
       <div className="chat-header">
         <div></div>
         {!!loggedUserAlias && <h3>Hi, <span className="username">{loggedUserAlias}</span>!</h3> }
-        <button>Logout</button>
+        <button onClick={logoutFunction}>Logout</button>
       </div>
       <div className="messages-container" onScroll={watchScroll}>
         { 

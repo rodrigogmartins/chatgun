@@ -35,6 +35,11 @@ function App() {
     });
   }
 
+  function logout() {
+    user.leave()
+    setLoggedUser(null)
+  }
+
   return (
     <>
       { !loggedUser 
@@ -49,6 +54,7 @@ function App() {
           />
         : <Chat
             loggedUser={user.is}
+            logoutFunction={logout}
           />
       }
     </>
