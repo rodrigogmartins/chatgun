@@ -27,8 +27,7 @@ function Chat({ loggedUser, logoutFunction }) {
   const [state, dispatch] = useReducer(reducer, initialState)
   
   const watchScroll = debounce((e) => {
-    const scrollOffset = 832;
-
+    const scrollOffset = 796;
     if (e.target.scrollTop === e.target.scrollHeight - scrollOffset) {
       setCanAutoScroll(false);
     } else {
@@ -76,6 +75,7 @@ function Chat({ loggedUser, logoutFunction }) {
   
           if (message.message) {
             dispatch(message)
+            autoScroll()
           }
         })
       setLoggedUserAlias(await gun.get(`~${loggedUser.alias}`).get('alias'))
